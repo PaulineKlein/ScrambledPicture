@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Scrambled Picture</string>
+    <string name="game_message_finish">"Bravo, vous avez Terminé !"</string>
+    <string name="game_message_error">"Non, ce n'est pas la bonne réponse"</string>
+    <string name="game_message_success">"Bravo, vous avez trouvé !"</string>
+    <string name="game_message_intro">"Quelle image se cache derrière ce puzzle ?"</string>
+    <string name="game_message_title">"Etape %s"</string>
+    <string name="game_answer_hint">"Votre réponse"</string>
+    <string name="game_button_validate">"Valider"</string>
+    <string name="game_button_continue">"Continuer"</string>
+</resources>
