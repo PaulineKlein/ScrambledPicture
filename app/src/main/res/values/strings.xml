@@ -8,4 +8,6 @@
     <string name="game_answer_hint">"Votre réponse"</string>
     <string name="game_button_validate">"Valider"</string>
     <string name="game_button_continue">"Continuer"</string>
+    <string name="game_button_retry">"Ressayer"</string>
+    <string name="game_button_again">"Recommencer"</string>
 </resources>

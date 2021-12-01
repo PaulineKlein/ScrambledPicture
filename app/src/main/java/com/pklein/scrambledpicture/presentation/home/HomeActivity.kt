@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.pklein.scrambledpicture.R
 import com.pklein.scrambledpicture.data.model.GameData
 import com.pklein.scrambledpicture.databinding.ActivityMainBinding
+import com.pklein.scrambledpicture.presentation.Alerts
 import com.pklein.scrambledpicture.utils.bind
 import com.pklein.scrambledpicture.utils.distinctUntilChanged
 import com.pklein.scrambledpicture.utils.map
@@ -24,9 +25,14 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        overridePendingTransition(R.anim.slide_in, R.anim.neutral)
 
         handleViewModelChanges()
         instantiateView()
+    }
+
+    override fun onBackPressed() {
+        overridePendingTransition(R.anim.neutral, R.anim.slide_out)
     }
 
     private fun instantiateView() {
@@ -63,6 +69,7 @@ class HomeActivity : AppCompatActivity() {
             val step = gameData.id
             binding.textViewTitle.text = getString(R.string.game_message_title, step.toString())
             binding.textViewDesc.text = getString(R.string.game_message_intro)
+            binding.textViewDesc.setTextAppearance(R.style.SousTitreClassique)
             val resource = when (gameData.imageName) {
                 "cat" -> R.drawable.cat
                 "coffee" -> R.drawable.coffee
@@ -89,8 +96,14 @@ class HomeActivity : AppCompatActivity() {
                 binding.buttonContinue.isEnabled = true
                 binding.buttonContinue.isClickable = true
                 binding.textViewDesc.text = getString(R.string.game_message_success)
+                binding.textViewDesc.setTextAppearance(R.style.SousTitreSucces)
             } else {
-                binding.textViewDesc.text = getString(R.string.game_message_error)
+                Alerts.showAlert(
+                    this,
+                    getString(R.string.game_message_error),
+                    getString(R.string.game_button_retry),
+                    null
+                )
             }
         }
     }
@@ -101,7 +114,13 @@ class HomeActivity : AppCompatActivity() {
             binding.buttonValidate.isClickable = false
             binding.buttonContinue.isEnabled = false
             binding.buttonContinue.isClickable = false
-            binding.textViewDesc.text = getString(R.string.game_message_finish)
+
+            Alerts.showAlert(
+                this,
+                getString(R.string.game_message_finish),
+                getString(R.string.game_button_again),
+                ::resetGame
+            )
         }
     }
 
@@ -115,5 +134,9 @@ class HomeActivity : AppCompatActivity() {
         binding.loader.hide()
         binding.loader.visibility = View.GONE
         binding.contentView.visibility = View.VISIBLE
+    }
+
+    private fun resetGame() {
+        homeViewModel.handle(HomeAction.ResetGame)
     }
 }

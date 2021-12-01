@@ -5,7 +5,6 @@ import com.pklein.scrambledpicture.data.model.GameData
 import com.pklein.scrambledpicture.presentation.BaseViewModel
 import com.pklein.scrambledpicture.utils.Action
 import com.pklein.scrambledpicture.utils.State
-import com.pklein.scrambledpicture.utils.extension.formatAnswer
 import kotlinx.coroutines.launch
 
 data class HomeState(
@@ -26,9 +25,6 @@ class HomeViewModel(
     initialState: HomeState = HomeState()
 ) : BaseViewModel<HomeState, HomeAction>(initialState) {
 
-    var gameDataList: List<GameData>? = listOf()
-    var gameState: Int = 0
-
     override fun handle(action: HomeAction) {
         when (action) {
             is HomeAction.ResetGame -> resetGame()
@@ -39,40 +35,35 @@ class HomeViewModel(
     }
 
     private fun resetGame() {
-        gameState = 0
-        getNextGame()
+        homeInteractor.resetGame() // set step to 0
+        getNextGame() // display first step
     }
 
     private fun getAllGame() {
         viewModelScope.launch {
-            gameDataList = homeInteractor.getAllGame()
-            getNextGame()
+            homeInteractor.getAllGame() // initialise game
+            getNextGame() // display first step
         }
     }
 
     private fun checkAnswer(answer: String) {
-        val isCorrect =
-            (answer.formatAnswer() == gameDataList?.get(gameState)?.answer?.formatAnswer())
-        if (isCorrect) {
-            gameState += 1
-        }
         updateState {
             it.copy(
-                isCorrect = isCorrect
+                isCorrect = homeInteractor.checkAnswer(answer)
             )
         }
     }
 
     private fun getNextGame() {
-        if (gameState < gameDataList?.size ?: 0) {
+        if (homeInteractor.canGameContinue()) {
             updateState {
                 it.copy(
-                    dataToShow = gameDataList?.get(gameState),
+                    dataToShow = homeInteractor.getNextGame(),
                     isFinish = false,
                     isCorrect = null
                 )
             }
-        } else {
+        } else { // end of game
             updateState {
                 it.copy(
                     dataToShow = null,

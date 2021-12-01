@@ -3,7 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/background_popup.xml" value="0.221875" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.20572916666666666" />
+        <entry key="app/src/main/res/layout/alert.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/scrambled_grid.xml" value="0.20572916666666666" />
       </map>
     </option>
   </component>
